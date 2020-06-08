@@ -12,9 +12,20 @@
 </head>
 <body>
 	<div class="content">
-		<div class="wrapper"><canvas id="myChart"></canvas></div>
+		<div class="chart-container">
+			<canvas id="myChart"></canvas>
+		</div>
 		<h3>hurrrrr</h3>
-		<div class="wrapper"><canvas id="myChart2"></canvas></div>
+		<div class="chart-container" >
+			<canvas id="feByYear"></canvas>
+		</div>
+		<div class="chart-container" >
+			<canvas id="feByGender"></canvas>
+		</div>
+		<div class="chart-container">
+
+			<canvas id="feByRace"></canvas>
+		</div>
 	</div>
 
 	<script>
@@ -26,6 +37,7 @@
 			// Need to transform the row-wise structure into single columns as arrays
 			// Chart.js needs data as "columnar" arrays - the opposite of d3
 		  console.log(data);
+			/*
 			var ages = [],
 				dates = [],
 				genders = [],
@@ -39,6 +51,7 @@
 				years.push(d.years);
 				races.push(d.race_imputation);
 			})
+			*/
 
 			const groupCount = function(data, group){
 
@@ -57,7 +70,9 @@
 						(keyUpper !== "#VALUE!") &&
 						(keyUpper !== "2100") &&
 						(keyUpper !== "NA") &&
-						(keyUpper !== "NULL")
+						(keyUpper !== "NULL") &&
+						// Remove erroneous data
+						(d.value > 3)
 					)
 				})
 
@@ -85,18 +100,54 @@
 				})
 				return values;
 			}
-			var ctx2 = document.getElementById('myChart2').getContext('2d');
-			var myChart2 = new Chart(ctx2,{
+
+			const get_random_color = function() {
+			  function c() {
+			    var hex = Math.floor(Math.random()*256).toString(16);
+			    return ("0"+String(hex)).substr(-2); // pad with zero
+			  }
+			  return "#"+c()+c()+c();
+			}
+
+			///////////////////////
+			// FE by Year Line Chart
+			///////////////////////
+			var ctx_feByYear = document.getElementById('feByYear').getContext('2d');
+			var myChart2 = new Chart(ctx_feByYear,{
 				"type":"line",
-				"data":{"labels":getKeys(feByYear),
+
+				"data":{
+					"labels":getKeys(feByYear),
+
 					"datasets":[{
-						"label":"Fatal Encounters by Year",
+						"label":"Fatal Encounters",
 						"data":getValues(feByYear),
+						"backgroundColor":"#d10000",
 						"fill":false,
-						"borderColor":"rgb(75, 192, 192)",
+						"borderColor":"#d10000",
+						"pointHoverRadius":10,
 						"lineTension":0.1}
 					]},
 				"options":{}});
+
+				///////////////////////
+				// FE by Race bar Chart
+				///////////////////////
+
+				var ctx_feByRace = document.getElementById('feByRace').getContext('2d');
+				var myChart2 = new Chart(ctx_feByRace,{
+					"type":"doughnut",
+
+					"data":{
+						"labels":getKeys(feByRace),
+						"datasets":[{
+							//"label":"Fatal Encounters",
+							"data":getValues(feByRace),
+							"backgroundColor":d3.schemeCategory10,
+							"weight":2}
+						]},
+					"options":{}});
+
 
 
 		});
