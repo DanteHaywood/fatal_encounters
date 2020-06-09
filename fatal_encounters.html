@@ -106,23 +106,27 @@
 			const feByGender = groupCount(data, "gender");
 			const feByRace = groupCount(data, "race_imputation");
 
+			const formatPerc = function(x){
+				return d3.format(".3g")(x);
+			}
+
 			//https://www.pewresearch.org/hispanic/2015/09/28/appendix-c-population-tables-1965-2065/
 			//https://www.census.gov/content/dam/Census/library/publications/2015/demo/p25-1143.pdf
 			const feByRacePerCapita = feByRace.map(function(d){
 				if(d.key == 'African-American/Black'){
-					value = 100 * d.value / 42039000;
+					value = formatPerc(100 * d.value / 42039000);
 				} else if(d.key == 'European-American/White'){
-					value = 100 * d.value / 246940000;
+					value = formatPerc(100 * d.value / 246940000);
 				} else if(d.key == 'Hispanic/Latino'){
-					value = 100 * d.value / 55410000;
+					value = formatPerc(100 * d.value / 55410000);
 				} else if(d.key == 'Race unspecified'){
-					value = 100 * d.value / 318748000;
+					value = formatPerc(100 * d.value / 318748000);
 				} else if(d.key == 'Asian/Pacific Islander'){
-					value = 100 * d.value / (17083000 + 734000);
+					value = formatPerc(100 * d.value / (17083000 + 734000));
 				} else if(d.key == 'Native American/Alaskan'){
-					value = 100 * d.value / 3957000;
+					value = formatPerc(100 * d.value / 3957000);
 				} else if(d.key == 'Other Race'){
-					value = 100 * d.value / 318748000;
+					value = formatPerc(100 * d.value / 318748000);
 				}
 				else if(d.key == 'Middle Eastern'){
 					value = 0;
