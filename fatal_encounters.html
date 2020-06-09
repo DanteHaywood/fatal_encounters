@@ -14,15 +14,25 @@
 <body>
 	<div class = "content" id="chart-content">
 
-		<div class="chart-container">
-			<canvas id="myChart"></canvas>
-		</div>
+		<p>
+			The <a href="https://fatalencounters.org/">Fatal Encounters</a> dataset is "A step toward creating an impartial, comprehensive, and searchable national database of people killed during interactions with law enforcement." It is a paid and voluntarily maintained dataset originally created by D. Brian Burghart in 2013. Brian created the website after looking for an authoritative source of fatal encounters with the police. Unfortunately none exist, which is likely a surprise to many people. My first thought would be to look for the data at the FBI. Even though the FBI collects detailed and vasts amount of information from police departments all over the country on crimes, they have not historically collected police uses of force. This is however changing with <a href="https://www.fbi.gov/services/cjis/ucr/use-of-force">recent motions at the FBI</a> beginning in 2015 and data collection starting mid-2019. However, the effectiveness of this program is to be determined, especially considering that participation in the program is voluntary.
+		</p>
 
-		<h3>hurrrrr</h3>
+		<p>
+			Where does this leave us? The history of police force will likely never be accurate because it has to be retroactively pieced together. Fatal Encounters has done an excellent job at collecting and documenting deaths. Other sources have attempted the same with most notable online prescence coming from The Washington Post, <a href="https://www.washingtonpost.com/graphics/investigations/police-shootings-database/">Fatal Force.</a> The database has the backing of a major news organization but does not log data older than 2015. For this reason, the charts and maps attached to this post use the Fatal Encounters dataset. Additionally, I appreciate that it saves the news articles on Google Drive, giving it more credibility.
+		</p>
+
+		<p>
+			The count of fatal encounters since the project's beginning remain steady at about 1,700 per year. One may view the chart and see an upward trend over the years but data older than 2013 was filled in retroactively. Online articles disappear and the year 2000 is ancient history for the internet. Local news and individuals did not have a hyper-online presence as they do now. This chart highlights the failure to collect police use of force. When we look back to research police use of force and its effect on communities, we are playing catch up.
+		</p>
 
 		<div class="chart-container my-5">
 			<canvas id="feByYear"></canvas>
 		</div>
+
+		<p>
+			The doughnut chart below displays the number of fatal encounters by race. You can click the button to convert the chart to the number of deaths per million by race. This updated chart makes it more obvious that we have a problem. The Fatal Encounters data and Fatal Force data both show that in proportion to their population, Black people are 2.5% - 3.5% more likely to be killed by the police. We cannot continue to ignore this fact. Many political pundits and online influencers will argue in opposition claiming that more European-Americans/Whites are killed by police. This is a dubious conclusion even though factually true. While some argue this point out of ignorance, some push this argument to specifically persuade those who are not knowledgeable on the subject. White people make up about 62% of the population or 246 million people. That is approximately 160 million more White people than Arican-American/Black. There will be more White deaths solely based on there being more White people. Let's take the argument to the absurdum. If there were thirty trillion White people and 99% of police killings were of Whites, would they argue the same? I would be more concerned that there are armed individuals patrolling the streets with a license to kill. We need to be tracking this information and develop systems to guide the discussion on how to best manage crime. If we are blind, we will wander in the darkness.
+		</p>
 
 		<div class="chart-container my-5">
 			<canvas id="feByRace"></canvas>
@@ -31,17 +41,21 @@
 		<div class="container pt-2">
 			<div class="row mx-md-n5">
 			  <div class="col px-md-5 mb-1" align='center'>
-					<button id = 'race-metric-button' type="button" class="btn btn-dark btn-lg">Convert to % of Race Population</button>
+					<button id = 'race-metric-button' type="button" class="btn btn-dark btn-lg">Convert to Deaths per Million</button>
 				</div>
 			</div>
 			<div class="row mx-md-n5 mb-5">
 				<div class="col px-md-5" align='center'>
-					<p><strong>Fatal Encounters by Race:</strong> <span id='fe-by-race-info'>European-Americans/Whites suffer a majority of fatal encounters however they also makeup the majority of the population. Convert the chart to learn more.</span>
+					<p><strong id='doughnut-title'>Fatal Encounters by Race:</strong> <span id='fe-by-race-info'>European-Americans/Whites suffer a majority of fatal encounters however they also makeup the majority of the population. Convert the chart to learn more.</span>
 					<a id='pop-source' href="https://www.census.gov/content/dam/Census/library/publications/2015/demo/p25-1143.pdf"><a>
 					</p>
 				</div>
 			</div>
 		</div>
+
+		<p>
+			While private individuals and organizations are taking the initiative to track these events, we need an authoritative source. We need a way to keep people with guns accountable. We are not the wild west. There are no outlaws and sheriffs. But maybe there is. Maybe the roles of outlaw and sheriff are more fluid. How do we know that those who are meant to protect us aren't destroying us? When you can't recognize the effects of a lack of oxygen but justify choking George Floyd several minutes after he has passed out. When you raid a house with guns loaded killing Breonna Taylor before exploring less violent alternatives. When two men hanging out of a truck cut off Ahmaud Arbery with loaded weapons, shoot him to death, and the police department hides it. When the very basics of human compassion are met with a tear gas cannister to the face, it all casts doubt on your honorable intentions. While these are all annecdotes, it is backed up by the data. And, no, this is not about some bad apples in the police force. There is no grounding for this statement since you do not collect the information and therefore cannot know. We have been discussing these problems for over a century. Until police prove that their actions are justified and they meet a new established system of accountability, many in the United States will not trust one police officer. Not one. Black Lives Matter.
+		</p>
 
 	</div>
 
@@ -107,26 +121,26 @@
 			const feByRace = groupCount(data, "race_imputation");
 
 			const formatPerc = function(x){
-				return d3.format(".3g")(x);
+				return d3.format(".0f")(x);
 			}
 
 			//https://www.pewresearch.org/hispanic/2015/09/28/appendix-c-population-tables-1965-2065/
 			//https://www.census.gov/content/dam/Census/library/publications/2015/demo/p25-1143.pdf
 			const feByRacePerCapita = feByRace.map(function(d){
 				if(d.key == 'African-American/Black'){
-					value = formatPerc(100 * d.value / 42039000);
+					value = formatPerc(1e6 * d.value / 42039000);
 				} else if(d.key == 'European-American/White'){
-					value = formatPerc(100 * d.value / 246940000);
+					value = formatPerc(1e6 * d.value / 246940000);
 				} else if(d.key == 'Hispanic/Latino'){
-					value = formatPerc(100 * d.value / 55410000);
+					value = formatPerc(1e6 * d.value / 55410000);
 				} else if(d.key == 'Race unspecified'){
-					value = formatPerc(100 * d.value / 318748000);
+					value = formatPerc(1e6 * d.value / 318748000);
 				} else if(d.key == 'Asian/Pacific Islander'){
-					value = formatPerc(100 * d.value / (17083000 + 734000));
+					value = formatPerc(1e6 * d.value / (17083000 + 734000));
 				} else if(d.key == 'Native American/Alaskan'){
-					value = formatPerc(100 * d.value / 3957000);
+					value = formatPerc(1e6 * d.value / 3957000);
 				} else if(d.key == 'Other Race'){
-					value = formatPerc(100 * d.value / 318748000);
+					value = formatPerc(1e6 * d.value / 318748000);
 				}
 				else if(d.key == 'Middle Eastern'){
 					value = 0;
@@ -167,7 +181,7 @@
 				feByRaceMetric = feByRace
 			;
 
-			// Taken from https://stackoverflow.com/questions/30256695/chart-js-drawing-an-arbitrary-vertical-line?rq=1
+			// Adapted from https://stackoverflow.com/questions/30256695/chart-js-drawing-an-arbitrary-vertical-line?rq=1
 			const verticalLinePlugin = {
 			  getLinePosition: function (chart, pointIndex) {
 			      const meta = chart.getDatasetMeta(0); // first dataset is used to discover X coordinate of a point
@@ -206,24 +220,31 @@
 					feByRaceMetric = feByRace;
 					raceMetric = 'perCapita';
 					document.getElementById('race-metric-button')
-						.textContent = 'Convert to % of Race Population';
+						.textContent = 'Convert to Deaths per Million';
+					document.getElementById('doughnut-title')
+						.textContent = "Fatal Encounters by Race:";
 					document.getElementById('fe-by-race-info')
 						.textContent = "Doughnut demonstrates the breakdown of fatal encounters by race. European-Americans/Whites suffer a majority of fatal encounters however they also makeup the majority of the population. Convert the chart to learn more.";
 					document.getElementById('pop-source')
 						.textContent = "";
+					newTitle = "Fatal Encounters by Race";
 				} else {
 					feByRaceMetric = feByRacePerCapita;
 					raceMetric = 'raw';
 					document.getElementById('race-metric-button')
 						.textContent = 'Convert to Raw Count';
+					document.getElementById('doughnut-title')
+						.textContent = "Fatal Encounters per Million by Race:";
 					document.getElementById('fe-by-race-info')
 						.textContent = "Doughnut compares the rate of fatal encounters within a race. It demonstrates a disparity between the percentage of fatal encounters for minorties in comparison to European-Americans/Whites. Race population estimates provided by U.S. Census.";
 					document.getElementById('pop-source')
 						.textContent = 'Source: U.S. Census Bureau, "Projections of the Size and Composition of the U.S. Population: 2014 to 2060", 2015.';
+					newTitle = "Fatal Encounters per Million by Race";
 				}
 				newData = {
 					"labels":getKeys(feByRaceMetric),
-					"data":getValues(feByRaceMetric)
+					"data":getValues(feByRaceMetric),
+					"title":newTitle,
 				}
 
 				newChartDataset(feByRaceChart, newData)
@@ -234,6 +255,7 @@
 			    chart.data.datasets.forEach((dataset) => {
 			        dataset.data = data.data;
 			    });
+					chart.options.title = {display:true, text: data.title};
 			    chart.update();
 			}
 
