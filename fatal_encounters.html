@@ -36,7 +36,9 @@
 			</div>
 			<div class="row mx-md-n5 mb-5">
 				<div class="col px-md-5" align='center'>
-					<p><strong>Fatal Encounters by Race:</strong> <span id='fe-by-race-info'>European-Americans/Whites suffer a majority of fatal encounters however they also makeup the majority of the population. Convert the chart to learn more.</span></p>
+					<p><strong>Fatal Encounters by Race:</strong> <span id='fe-by-race-info'>European-Americans/Whites suffer a majority of fatal encounters however they also makeup the majority of the population. Convert the chart to learn more.</span>
+					<a id='pop-source' href="https://www.census.gov/content/dam/Census/library/publications/2015/demo/p25-1143.pdf"><a>
+					</p>
 				</div>
 			</div>
 		</div>
@@ -167,15 +169,19 @@
 					raceMetric = 'perCapita';
 					document.getElementById('race-metric-button')
 						.textContent = 'Convert to % of Race Population';
-						document.getElementById('fe-by-race-info')
-							.textContent = "Doughnut demonstrates the breakdown of fatal encounters by race. European-Americans/Whites suffer a majority of fatal encounters however they also makeup the majority of the population. Convert the chart to learn more."
+					document.getElementById('fe-by-race-info')
+						.textContent = "Doughnut demonstrates the breakdown of fatal encounters by race. European-Americans/Whites suffer a majority of fatal encounters however they also makeup the majority of the population. Convert the chart to learn more.";
+					document.getElementById('pop-source')
+						.textContent = "";
 				} else {
 					feByRaceMetric = feByRacePerCapita;
 					raceMetric = 'raw';
 					document.getElementById('race-metric-button')
 						.textContent = 'Convert to Raw Count';
 					document.getElementById('fe-by-race-info')
-						.textContent = "Doughnut compares the rate of fatal encounters within a race. It demonstrates a disparity between the percentage of fatal encounters for minorties in comparison to European-Americans/Whites.";
+						.textContent = "Doughnut compares the rate of fatal encounters within a race. It demonstrates a disparity between the percentage of fatal encounters for minorties in comparison to European-Americans/Whites. Race population estimates provided by U.S. Census.";
+					document.getElementById('pop-source')
+						.textContent = 'Source: U.S. Census Bureau, "Projections of the Size and Composition of the U.S. Population: 2014 to 2060", 2015.';
 				}
 				newData = {
 					"labels":getKeys(feByRaceMetric),
