@@ -28,10 +28,15 @@
 			<canvas id="feByRace"></canvas>
 		</div>
 
-		<div class="container pt-5">
+		<div class="container pt-2">
 			<div class="row mx-md-n5">
-			  <div class="col px-md-5" align='center'>
-					<button id = 'race-metric-button' type="button" class="btn btn-dark btn-lg">Switch to % of Race Population</button>
+			  <div class="col px-md-5 mb-1" align='center'>
+					<button id = 'race-metric-button' type="button" class="btn btn-dark btn-lg">Convert to % of Race Population</button>
+				</div>
+			</div>
+			<div class="row mx-md-n5 mb-5">
+				<div class="col px-md-5" align='center'>
+					<p><strong>Fatal Encounters by Race:</strong> <span id='fe-by-race-info'>European-Americans/Whites suffer a majority of fatal encounters however they also makeup the majority of the population. Convert the chart to learn more.</span></p>
 				</div>
 			</div>
 		</div>
@@ -66,7 +71,7 @@
 			// Dynamically set chart size base on viewer device
 			var size = {
 			  width: $('#chart-content').parent().width() * 0.95,
-			  height: document.documentElement.clientHeight * 0.8
+			  height: document.documentElement.clientHeight * 0.6
 			}
 
 			const groupCount = function(data, group){
@@ -100,6 +105,7 @@
 			const feByRace = groupCount(data, "race_imputation");
 
 			//https://www.pewresearch.org/hispanic/2015/09/28/appendix-c-population-tables-1965-2065/
+			//https://www.census.gov/content/dam/Census/library/publications/2015/demo/p25-1143.pdf
 			const feByRacePerCapita = feByRace.map(function(d){
 				if(d.key == 'African-American/Black'){
 					value = 100 * d.value / 42039000;
@@ -108,13 +114,13 @@
 				} else if(d.key == 'Hispanic/Latino'){
 					value = 100 * d.value / 55410000;
 				} else if(d.key == 'Race unspecified'){
-					value = 100 * d.value / 55410000;
+					value = 100 * d.value / 318748000;
 				} else if(d.key == 'Asian/Pacific Islander'){
 					value = 100 * d.value / (17083000 + 734000);
 				} else if(d.key == 'Native American/Alaskan'){
 					value = 100 * d.value / 3957000;
 				} else if(d.key == 'Other Race'){
-					value = 0;
+					value = 100 * d.value / 318748000;
 				}
 				else if(d.key == 'Middle Eastern'){
 					value = 0;
@@ -160,12 +166,16 @@
 					feByRaceMetric = feByRace;
 					raceMetric = 'perCapita';
 					document.getElementById('race-metric-button')
-						.textContent = 'Switch to % of Race Population';
+						.textContent = 'Convert to % of Race Population';
+						document.getElementById('fe-by-race-info')
+							.textContent = "Doughnut demonstrates the breakdown of fatal encounters by race. European-Americans/Whites suffer a majority of fatal encounters however they also makeup the majority of the population. Convert the chart to learn more."
 				} else {
 					feByRaceMetric = feByRacePerCapita;
 					raceMetric = 'raw';
 					document.getElementById('race-metric-button')
-						.textContent = 'Switch to Raw Count';
+						.textContent = 'Convert to Raw Count';
+					document.getElementById('fe-by-race-info')
+						.textContent = "Doughnut compares the rate of fatal encounters within a race. It demonstrates a disparity between the percentage of fatal encounters for minorties in comparison to European-Americans/Whites.";
 				}
 				newData = {
 					"labels":getKeys(feByRaceMetric),
